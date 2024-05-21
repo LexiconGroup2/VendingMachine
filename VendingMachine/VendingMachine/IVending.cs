@@ -13,5 +13,5 @@ namespace VendingMachine
         string Details(int productId);
         void InsertMoney(int amount);
         Dictionary<int, int> EndTransaction();
-    }
+    } 
 }
