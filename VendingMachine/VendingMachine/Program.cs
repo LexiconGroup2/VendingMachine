@@ -1,11 +1,12 @@
-﻿using Vendingmachine;
+﻿using VendingMachine;
 
 public class Program
 {
     public static void Main(string[] args)
 
     {
-        Ivendending VendingMachine = new VendingMachine();
+        VendingMachineService vending = new VendingMachineService();
+       // Ivendending VendingMachine = new VendingMachine();
 
         while (true)
         {
@@ -23,7 +24,7 @@ public class Program
                 switch (choice)
                 {
                     case "1":
-                        var products = VendingMachine.DisplayProductDetails();
+                        var products = vending.ShowAll;
 
                         break;
 
@@ -31,9 +32,8 @@ public class Program
 
                         Console.WriteLine("Enter product Id");
 
-                        string productId = Console.ReadLine();
 
-                        Console.WriteLine(VendingMachine.showproductdetails(productId));
+                        Console.WriteLine(vending.Details);
                         break;
 
                     case "3":
@@ -42,7 +42,7 @@ public class Program
 
                         int amount = int.Parse(Console.ReadLine());
 
-                        VendingMachine.EnterMoney(amount);
+                        vending.InsertMoney(amount);
 
                         break;
 
@@ -53,7 +53,7 @@ public class Program
 
                     case "5":
 
-                        var change = VendingMachine.EndTransaction();
+                        var change = vending.EndTransaction();
 
                         Console.WriteLine("Transaction Ended");
 

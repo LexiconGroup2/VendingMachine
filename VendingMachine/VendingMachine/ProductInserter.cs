@@ -15,7 +15,7 @@ namespace VendingMachine
 
             products.Add(new Drink("Coke", 15, 250));
             products.Add(new Snack("Chips", 20, 200));
-            products.Add(new Toy("Action Figure", 50, "Plastic"));
+            products.Add(new Toy("Spaider man", 50, "Plastic"));
 
             return products;
         }
