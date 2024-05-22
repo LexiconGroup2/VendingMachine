@@ -25,12 +25,12 @@ public class Program
                 {
                     case "1":
                         var products = vending.ShowAll;
-
+                        Console.WriteLine(products);
                         break;
 
                     case "2":
 
-                        Console.WriteLine("Enter product Id");
+                        //Console.WriteLine("Enter product Id");
 
 
                         Console.WriteLine(vending.Details);
