@@ -110,11 +110,13 @@ namespace VendingMachine
                 Console.ReadKey();
                 return 0; // Return 0 if there are no products
             }
-
-            Console.WriteLine("\t\tNow you can choose from the following products:");
-            foreach (var product in products)
+            else
             {
-                Console.WriteLine($"{product.Id}. {product.Name} - {product.Price}kr");
+                Console.WriteLine("\t\tNow you can choose from the following products:");
+                foreach (var product in products)
+                {
+                    Console.WriteLine($"{product.Id}. {product.Name} - {product.Price}kr");
+                }
             }
 
             int selectedOption = 0; // Declare and initialize selectedOption variable
@@ -134,19 +136,11 @@ namespace VendingMachine
                 }
                 else if (int.TryParse(input, out productCode) && products.Any(p => p.Id == productCode))
                 {
-                    try
+                    // Purchase the product and handle success or failure
+                    success = PurchaseProduct(productCode);
+                    if (success)
                     {
-                        PurchaseProduct(productCode);
                         selectedOption = productCode; // Assign product code to selectedOption
-                        success = true;
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        if (ex.Message == "Insufficient balance")
-                        {
-                            InsertCoin();
-                        }
                     }
                 }
                 else if (input?.ToUpper() == "B")
@@ -162,7 +156,6 @@ namespace VendingMachine
 
             return selectedOption;
         }
-
 
         static string ValidCheckLttr(string lttr)
         {
@@ -192,12 +185,20 @@ namespace VendingMachine
                         vendingMachineService.InsertMoney(amount);
                         Console.WriteLine($"{amount}kr inserted successfully.");
                         Console.WriteLine("Do you want to insert more money or go back to the main menu? (M for more money, B to go back)");
-                        string response = Console.ReadLine()?.ToUpper();
-                        if (response == "B")
+                        string response = Console.ReadLine()?.Trim().ToUpper();
+                        if (!string.IsNullOrEmpty(response))
                         {
-                            // Exit the loop if the user wants to go back to the main menu
-                            success = true;
+                            if (response == "B")
+                            {
+                                // Exit the loop if the user wants to go back to the main menu
+                                success = true;
+                            }
                         }
+                        else
+                        {
+                            Console.WriteLine("Invalid input. Please enter 'M' for more money or 'B' to go back.");
+                        }
+
                     }
                     catch (ArgumentException ex)
                     {
@@ -232,13 +233,15 @@ namespace VendingMachine
             Console.ReadKey();
         }
 
-        public static void PurchaseProduct(int productCode)
+       
+        public static bool PurchaseProduct(int productCode)
         {
             try
             {
                 Product product = vendingMachineService.Purchase(productCode);
                 Console.WriteLine($"Purchased: {product.Name} for {product.Price}kr.");
                 vendingMachineService.AddCart(productCode);
+                return true; // Purchase successful
             }
             catch (InvalidOperationException ex)
             {
@@ -246,11 +249,12 @@ namespace VendingMachine
                 {
                     Console.WriteLine("Insufficient balance. Please insert money to proceed with the purchase.");
                     InsertCoin(); // Prompt the user to insert money
-                    PurchaseProduct(productCode); // Attempt the purchase again
+                    return PurchaseProduct(productCode); // Attempt the purchase again
                 }
                 else
                 {
                     Console.WriteLine(ex.Message);
+                    return false; // Purchase failed
                 }
             }
         }
@@ -284,6 +288,16 @@ namespace VendingMachine
 
         public static void Checkout()
         {
+            // Check if the cart is empty
+            if (vendingMachineService.ViewCart().Count == 0)
+            {
+                Console.WriteLine("Your cart is empty. Please add items before checking out.");
+                Console.WriteLine("Press any key to return to the main menu...");
+                Console.ReadKey();
+                // Return to the main menu
+                Menu();
+            }
+
             try
             {
                 string message = vendingMachineService.Checkout();
