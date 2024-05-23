@@ -12,13 +12,16 @@ namespace VendingMachine
         public int Id { get; private set; }
         public string Name { get; set; }
         public int Price { get; set; }
-
-        public Product(string name, int price)
+        public string Category { get; internal set; }
+        public string Description { get; set; }
+        public Product(string name, int price, string category)
         {
             Id = ++totalProductCount;
             Name = name;
             Price = price;
+            Category = category;
         }
+
 
         public abstract string Examine();
         public abstract string Use();

@@ -8,7 +8,7 @@ namespace VendingMachine
 {
     public class Denominations
     {
-        public static readonly int[] ValidDenominations = { 1, 5, 10, 20, 50, 100, 500, 1000 };
-        
+        public static readonly List<int> ValidDenominations = new List<int> { 1, 5, 10, 20, 50, 100, 200, 500, 1000 };
+
     }
 }

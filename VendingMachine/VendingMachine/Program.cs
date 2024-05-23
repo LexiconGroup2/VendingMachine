@@ -1,88 +1,65 @@
-﻿using VendingMachine;
-
-public class Program
+﻿using System;
+using System.Collections.Generic;
+using VendingMachine;
+namespace VendingMachine
 {
-    public static void Main(string[] args)
-
+    internal class Program
     {
-        VendingMachineService vending = new VendingMachineService();
-       // Ivendending VendingMachine = new VendingMachine();
-
-        while (true)
+        static void Main(string[] args)
         {
-            Console.WriteLine("Vending MAchine");
-            Console.WriteLine("1.Display All The products");
-            Console.WriteLine("2.Display product Details");
-            Console.WriteLine("3.Insert Money");
-            Console.WriteLine("4.My Shopping Cart");
-            Console.WriteLine("5.End Transaction");
-            Console.WriteLine("6.Exit");
-            Console.WriteLine("Select an option");
+            string selectedCategory = ""; // Placeholder for the selected product category
+            Dictionary<int, string> productDict = new Dictionary<int, string>();
+            string previousChoice = "";
+            Console.WriteLine(VendingMachineController.Greeting()); // Greet the customer and display the main menu
 
-            string choice = Console.ReadLine();
+            List<Product> products = ProductInserter.GetInitialProducts();
+
+            // Populate the product dictionary with product IDs and names
+            for (int i = 0; i < products.Count; i++)
             {
-                switch (choice)
-                {
-                    case "1":
-                        var products = vending.ShowAll;
-                        Console.WriteLine(products);
-                        break;
-
-                    case "2":
-
-                        //Console.WriteLine("Enter product Id");
-
-
-                        Console.WriteLine(vending.Details);
-                        break;
-
-                    case "3":
-
-                        Console.WriteLine("Enter the amount");
-
-                        int amount = int.Parse(Console.ReadLine());
-
-                        vending.InsertMoney(amount);
-
-                        break;
-
-                    case "4":
-
-                        Console.WriteLine("My Shopping Cart");
-                        break;
-
-                    case "5":
-
-                        var change = vending.EndTransaction();
-
-                        Console.WriteLine("Transaction Ended");
-
-                        foreach (var item in change)
-                        {
-                            Console.WriteLine($"{item.Key}Kr:{item.Value} coins");
-                        }
-
-
-                        break;
-                    case "6":
-                        return;
-
-                    default:
-                        Console.WriteLine("Enter valid opiton");
-                        break;
-
-
-
-
-
-
-                }
+                productDict.Add(i + 1, products[i].Name);
             }
 
+            // Loop until the user decides to exit
+            while (true)
+            {
+                // Display the main menu and get the user's choice
+                selectedCategory = VendingMachineController.Menu(selectedCategory);
+
+                // If the selected category is empty, exit the loop
+                if (selectedCategory == "")
+                {
+                    Console.WriteLine("Thank you for using our vending machine. Have a great day!");
+                    break;
+                }
+
+                // Process the selected category
+                // Handle the selected option
+                switch (selectedCategory)
+                {
+                    case "T": // Toy category
+                    case "D": // Soft drink category
+                    case "S": // Snack category
+                              // Process the selected product
+                              // Pass the selected product code
+                        int selectedOption = VendingMachineController.SubMenu(selectedCategory, previousChoice, productDict, selectedCategory);
+                        VendingMachineController.PurchaseProduct(selectedOption);
+                        break;
+                    case "A": // Add money to the balance
+                        VendingMachineController.InsertCoin();
+                        break;
+                    case "C": // View cart
+                        VendingMachineController.ViewCart();
+                        break;
+                    case "K": // Checkout
+                        VendingMachineController.Checkout();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid selection.");
+                        break;
+                }
+            }
         }
-
-
-
     }
 }
 
