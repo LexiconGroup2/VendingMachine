@@ -13,5 +13,10 @@ namespace VendingMachine
         string Details(int productId);
         void InsertMoney(int amount);
         Dictionary<int, int> EndTransaction();
+        public string AddCart(int productId);
+        public string RemoveCart(int productId);
+        public List<string> ViewCart();
+        public string Checkout();
+
     } 
 }
