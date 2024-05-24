@@ -25,10 +25,8 @@ namespace VendingMachine
             products.Add(new Toy("Batman", 100, "Toy", "Plastic", "Dark knight action figure"));
             products.Add(new Toy("Transformers", 80, "Toy", "Metal", "Transforming robot toy"));
 
-
-
-
             return products;
         }
     }
+
 }

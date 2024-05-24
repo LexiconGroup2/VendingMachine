@@ -8,27 +8,28 @@ using VendingMachine;
 
 namespace VendingMachine
 {
-    public class Toy : Product
-    {
-        public string Material { get; set; }
-        public string Description { get; set; }
-
-        public Toy(string name, int price, string category, string material, string description)
-            : base(name, price, category)
+        public class Toy : Product
         {
-            Material = material;
-            Description = description;
-        }
+            public string Material { get; set; }
 
-        public override string Examine()
-        {
-            return $"ID: {Id}, Product: {Name}, Price: {Price:C}, Material: {Material}, Description: {Description}";
-        }
+            public Toy(string name, int price, string category, string material, string description)
+                : base(name, price, category)
+            {
+                Material = material;
+                Description = description; // Inherited from Product class
+            }
 
-        public override string Use()
-        {
-            return $"You play with the {Name}. Fun!";
+            public override string Examine()
+            {
+                return $"ID: {Id}, Product: {Name}, Price: {Price:C}, Material: {Material}, Description: {Description}";
+            }
+
+            public override string Use()
+            {
+                return $"You play with the {Name}. Fun!";
+            }
         }
-    }
+   
+
 
 }
