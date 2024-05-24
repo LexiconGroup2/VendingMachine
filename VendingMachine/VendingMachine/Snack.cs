@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace VendingMachine
 {
-    internal class Snack : Product
+    public class Snack : Product
     {
         public int Calories { get; set; }
         public string Description { get; set; }
