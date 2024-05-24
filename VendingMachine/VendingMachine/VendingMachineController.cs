@@ -321,6 +321,7 @@ namespace VendingMachine
                 if (response == "N")
                 {
                     Console.Clear();
+                    Console.WriteLine($"\t\tPlease take the returns money left: {vendingMachineService.GetBalance()}kr");
                     Console.WriteLine("\t\tThank you for using A.O.T. Inc. vending machine!");
                     Environment.Exit(0); // Exit the program
                 }
