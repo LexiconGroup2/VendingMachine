@@ -91,10 +91,10 @@ namespace VendingMachine
                 }
                 else
                 {
-                    Console.WriteLine("Please choose only from the letters in the menu!");
+                    Console.WriteLine("\t\tPlease choose only from the letters in the menu!");
                 }
             } while (!scs);
-
+            Console.Clear();
             return currentChoice;
         }
 
@@ -105,17 +105,19 @@ namespace VendingMachine
 
             if (!products.Any())
             {
-                Console.WriteLine($"No products available in the {ProductCategory} category.");
-                Console.WriteLine("Press any key to return to the main menu...");
+                Console.Clear();
+                Console.WriteLine($"\t\tNo products available in the {ProductCategory} category.");
+                Console.WriteLine("\t\tPress any key to return to the main menu...");
                 Console.ReadKey();
                 return 0; // Return 0 if there are no products
             }
             else
             {
+                Console.Clear();
                 Console.WriteLine("\t\tNow you can choose from the following products:");
                 foreach (var product in products)
                 {
-                    Console.WriteLine($"{product.Id}. {product.Name} - {product.Price}kr");
+                    Console.WriteLine($"\t\t{product.Id}. {product.Name} - {product.Price}kr");
                 }
             }
 
@@ -150,7 +152,7 @@ namespace VendingMachine
                 }
                 else
                 {
-                    Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("\t\tInvalid choice. Please try again.");
                 }
             } while (!success);
 
@@ -165,7 +167,7 @@ namespace VendingMachine
             }
             else
             {
-                Console.WriteLine("Please choose only from the letters in the menu!");
+                Console.WriteLine("\t\tPlease choose only from the letters in the menu!");
                 return "";
             }
         }
@@ -175,16 +177,17 @@ namespace VendingMachine
             bool success = false;
             do
             {
-                Console.WriteLine("Enter the amount to insert (valid denominations: 1, 5, 10, 20, 50, 100, 200, 500, 1000): ");
+                Console.Clear();
+                Console.Write("\t\tEnter the amount to insert (valid denominations: 1, 5, 10, 20, 50, 100, 200, 500, 1000): ");
                 string input = Console.ReadLine();
-                Console.WriteLine($"Entered denomination: {input}"); // Debugging output
+                Console.WriteLine($"\t\tEntered denomination: {input}"); // Debugging output
                 if (int.TryParse(input, out int amount))
                 {
                     try
                     {
                         vendingMachineService.InsertMoney(amount);
-                        Console.WriteLine($"{amount}kr inserted successfully.");
-                        Console.WriteLine("Do you want to insert more money or go back to the main menu? (M for more money, B to go back)");
+                        Console.WriteLine($"\t\t{amount}kr inserted successfully.");
+                        Console.Write("\t\tDo you want to insert more money or go back to the main menu? (M for more money, B to go back): ");
                         string response = Console.ReadLine()?.Trim().ToUpper();
                         if (!string.IsNullOrEmpty(response))
                         {
@@ -196,7 +199,7 @@ namespace VendingMachine
                         }
                         else
                         {
-                            Console.WriteLine("Invalid input. Please enter 'M' for more money or 'B' to go back.");
+                            Console.WriteLine("\t\tInvalid input. Please enter 'M' for more money or 'B' to go back.");
                         }
 
                     }
@@ -207,7 +210,7 @@ namespace VendingMachine
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a numeric value.");
+                    Console.WriteLine("\t\tInvalid input. Please enter a numeric value.");
                 }
             } while (!success);
         }
@@ -218,18 +221,19 @@ namespace VendingMachine
             List<Product> products = vendingMachineService.GetProductsByCategory(category);
             if (products.Any())
             {
-                Console.WriteLine($"Products in the {category} category:");
+                Console.Clear();
+                Console.WriteLine($"\t\tProducts in the {category} category:");
                 foreach (var product in products)
                 {
-                    Console.WriteLine($"{product.Id}. {product.Name} - {product.Price}kr");
+                    Console.WriteLine($"\t\t{product.Id}. {product.Name} - {product.Price}kr");
                 }
             }
             else
             {
-                Console.WriteLine($"No products available in the {category} category.");
+                Console.WriteLine($"\t\tNo products available in the {category} category.");
             }
 
-            Console.WriteLine("Press any key to continue...");
+            Console.WriteLine("\t\tPress any key to continue...");
             Console.ReadKey();
         }
 
@@ -238,16 +242,18 @@ namespace VendingMachine
         {
             try
             {
+                Console.Clear();
                 Product product = vendingMachineService.Purchase(productCode);
-                Console.WriteLine($"Purchased: {product.Name} for {product.Price}kr.");
+                Console.WriteLine($"\t\tPurchased: {product.Name} for {product.Price}kr.");
                 vendingMachineService.AddCart(productCode);
                 return true; // Purchase successful
             }
             catch (InvalidOperationException ex)
             {
-                if (ex.Message == "Insufficient balance")
+                if (ex.Message == "\t\tInsufficient balance")
                 {
-                    Console.WriteLine("Insufficient balance. Please insert money to proceed with the purchase.");
+                    Console.Clear();
+                    Console.WriteLine("\t\tInsufficient balance. Please insert money to proceed with the purchase.");
                     InsertCoin(); // Prompt the user to insert money
                     return PurchaseProduct(productCode); // Attempt the purchase again
                 }
@@ -264,7 +270,8 @@ namespace VendingMachine
             List<string> cartItems = vendingMachineService.ViewCart();
             if (cartItems.Any())
             {
-                Console.WriteLine("Items in your cart:");
+                Console.Clear();
+                Console.WriteLine("\t\tItems in your cart:");
                 foreach (string item in cartItems)
                 {
                     Console.WriteLine(item);
@@ -272,10 +279,11 @@ namespace VendingMachine
             }
             else
             {
-                Console.WriteLine("Your cart is empty.");
+                Console.Clear();
+                Console.WriteLine("\t\tYour cart is empty.");
             }
 
-            Console.WriteLine("Press any key to continue...");
+            Console.WriteLine("\t\tPress any key to continue...");
             Console.ReadKey(); // Wait for user to press any key
 
             // Clear the console
@@ -291,8 +299,9 @@ namespace VendingMachine
             // Check if the cart is empty
             if (vendingMachineService.ViewCart().Count == 0)
             {
-                Console.WriteLine("Your cart is empty. Please add items before checking out.");
-                Console.WriteLine("Press any key to return to the main menu...");
+                Console.Clear();
+                Console.WriteLine("\t\tYour cart is empty. Please add items before checking out.");
+                Console.WriteLine("\t\tPress any key to return to the main menu...");
                 Console.ReadKey();
                 // Return to the main menu
                 Menu();
@@ -300,17 +309,19 @@ namespace VendingMachine
 
             try
             {
+                Console.Clear();
                 string message = vendingMachineService.Checkout();
                 Console.WriteLine(message);
 
                 // Display current balance
-                Console.WriteLine($"Your current balance: {vendingMachineService.GetBalance()}kr");
+                Console.WriteLine($"\t\tYour current balance: {vendingMachineService.GetBalance()}kr");
 
-                Console.WriteLine("Do you want to buy more items? (Y/N)");
+                Console.Write("\t\tDo you want to buy more items? (Y/N): ");
                 string response = Console.ReadLine()?.ToUpper();
                 if (response == "N")
                 {
-                    Console.WriteLine("Thank you for using A.O.T. Inc. vending machine!");
+                    Console.Clear();
+                    Console.WriteLine("\t\tThank you for using A.O.T. Inc. vending machine!");
                     Environment.Exit(0); // Exit the program
                 }
             }
@@ -327,17 +338,18 @@ namespace VendingMachine
             var product = vendingMachineService.GetProductById(productId);
             if (product != null)
             {
-                Console.WriteLine($"Product ID: {product.Id}");
-                Console.WriteLine($"Name: {product.Name}");
-                Console.WriteLine($"Price: {product.Price}kr");
-                Console.WriteLine($"Description: {product.Description}");
+                Console.Clear();
+                Console.WriteLine($"\t\tProduct ID: {product.Id}");
+                Console.WriteLine($"\t\tName: {product.Name}");
+                Console.WriteLine($"\t\tPrice: {product.Price}kr");
+                Console.WriteLine($"\t\tDescription: {product.Description}");
             }
             else
             {
-                Console.WriteLine("Product not found.");
+                Console.WriteLine("\t\tProduct not found.");
             }
 
-            Console.WriteLine("Press any key to continue...");
+            Console.WriteLine("\t\tPress any key to continue...");
             Console.ReadKey();
         }
 
